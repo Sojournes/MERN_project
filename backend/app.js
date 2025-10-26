@@ -3,14 +3,24 @@ const express = require("express");
 const app = express();
 const PORT = 4444;
 const cors = require("cors");
+const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hi from backend app.");
-});
+app.use('/admin', require('./routes/admin'));
+// app.use('/', require('./routes/user'));
+// app.use('/admin',);
+// app.use('/restaurant',);
 
-app.listen(PORT, () => {
-  console.log(`http://localhost:PORT`);
-});
+
+mongoose.connect('mongodb://localhost:27017/foodapp').then(() =>{
+    app.listen(PORT, () => {
+    console.log(`http://localhost:${PORT}`);
+    });
+})
